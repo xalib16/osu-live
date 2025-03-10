@@ -35,7 +35,7 @@ export const beatmapTable = pgTable("beatmap", {
 export const scoreTable = pgTable("score", {
     id: integer("id").primaryKey().notNull(),
     accuracy: real("accuracy").notNull(),
-    mods: text("mods").notNull().default("[]"),
+    mods: integer("mods").notNull().default(0),
     pp: real("pp").notNull().default(0),
     ruleset_id: integer("ruleset_id").notNull(),
     rank: text("rank").notNull(),

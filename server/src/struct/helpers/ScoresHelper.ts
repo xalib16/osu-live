@@ -1,5 +1,6 @@
 import { TransformedAPIData } from "@/types";
 import { DatabaseAPI } from "../DatabaseAPI";
+import { encodeModBits } from "./ModsHelper";
 //import { OsuAPI } from "../OsuAPI";
 
 const db = new DatabaseAPI();
@@ -72,7 +73,7 @@ export async function createNewScore(data: TransformedAPIData) {
         await transactionContext.createScore({
             id: data.id,
             accuracy: data.accuracy,
-            mods: JSON.stringify(data.mods.map(mod => mod.acronym)),
+            mods: encodeModBits(data.mods),
             pp: data.pp || 0,
             ruleset_id: data.rulesetId,
             rank: data.rank,

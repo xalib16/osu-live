@@ -32,7 +32,7 @@ export type DatabaseScore = {
     pp: number;
     ruleset_id: number;
     rank: string;
-    mods: string;
+    mods: number;
     user_id: number;
     beatmap_id: number;
     ended_at: number;

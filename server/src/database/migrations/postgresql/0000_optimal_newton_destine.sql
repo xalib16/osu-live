@@ -20,7 +20,7 @@ CREATE TABLE "beatmap" (
 CREATE TABLE "score" (
 	"id" integer PRIMARY KEY NOT NULL,
 	"accuracy" real NOT NULL,
-	"mods" text DEFAULT '[]' NOT NULL,
+	"mods" integer DEFAULT 0 NOT NULL,
 	"pp" real DEFAULT 0 NOT NULL,
 	"ruleset_id" integer NOT NULL,
 	"rank" text NOT NULL,
