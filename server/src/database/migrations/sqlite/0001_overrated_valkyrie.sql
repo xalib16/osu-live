@@ -6,7 +6,7 @@ CREATE TABLE `__new_beatmap_set` (
 	`artist` text NOT NULL,
 	`user_id` integer NOT NULL,
 	`updated_at` integer DEFAULT (unixepoch()) NOT NULL,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 INSERT INTO `__new_beatmap_set`("id", "title", "status", "artist", "user_id", "updated_at") SELECT "id", "title", "status", "artist", "user_id", "updated_at" FROM `beatmap_set`;--> statement-breakpoint
