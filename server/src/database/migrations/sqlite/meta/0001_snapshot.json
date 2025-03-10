@@ -63,7 +63,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -171,11 +171,11 @@
         },
         "mods": {
           "name": "mods",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'[]'"
+          "default": 0
         },
         "pp": {
           "name": "pp",
