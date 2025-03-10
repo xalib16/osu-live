@@ -11,7 +11,7 @@ export class DatabaseAPI {
         this.dbContext = context ?? db;
     }
 
-    public async transaction<T>(operation: (tx: any) => Promise<T>): Promise<void> {
+    public async transaction<T>(operation: (tx: any) => Promise<T>): Promise<any> {
         return await databaseQueue.addJob(async () => {
             return await db.transaction(async (tx) => {
                 return await operation(tx);
@@ -19,7 +19,7 @@ export class DatabaseAPI {
         })
     }
 
-    public getUsers(filter?: (fields: any) => SQL<unknown> | undefined, relations?: UserRelations)/*: Promise<DatabaseUser[]>*/ {
+    public getUsers(filter?: (fields: any) => SQL<unknown> | undefined, relations?: UserRelations): Promise<DatabaseUser[]> {
         return this.dbContext.query.userTable.findMany({
             where: filter || undefined,
             with: relations || undefined
