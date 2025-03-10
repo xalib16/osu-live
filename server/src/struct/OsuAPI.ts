@@ -1,9 +1,11 @@
-import { redis } from "../index.js";
-import { WebAPIBeatmapsResponse } from "../schema/WebAPIBeatmapsResponse.js";
-import { WebAPIScoresResponse } from "../schema/WebAPIScoresResponse.js";
-import { WebAPITokenResponse } from "../schema/WebAPITokenResponse.js";
-import { WebAPIUsersResponse } from "../schema/WebAPIUsersResponse.js";
-import { TransformedAPIData } from "../types/index.js";
+import "dotenv/config";
+import { redis } from "../index";
+import { WebAPIBeatmapsResponse } from "../schema/OsuAPI/WebAPIBeatmapsResponse";
+import { WebAPIScoresResponse } from "../schema/OsuAPI/WebAPIScoresResponse";
+import { WebAPITokenResponse } from "../schema/OsuAPI/WebAPITokenResponse";
+import { WebAPIUsersResponse } from "../schema/OsuAPI/WebAPIUsersResponse";
+import { TransformedAPIData } from "../types/index";
+import { createNewScore } from "./helpers/ScoresHelper";
 
 export class OsuAPI {
   public isApiHealthy: boolean | null = null;
@@ -15,6 +17,7 @@ export class OsuAPI {
   private bearer?: string;
   private bearer_expires?: Date;
   private scoreCursor?: number;
+  private basicAuth?: boolean;
 
   private async request(
     url: string | URL,
@@ -23,7 +26,8 @@ export class OsuAPI {
     if (
       this.bearer === undefined ||
       (this.bearer_expires &&
-        this.bearer_expires.getTime() < Date.now() + 1000 * 60 * 30)
+        this.bearer_expires.getTime() < Date.now() + 1000 * 60 * 30) ||
+        this.basicAuth
     ) {
       await this.login();
     }
@@ -35,10 +39,12 @@ export class OsuAPI {
 
     if (response.status !== 200) {
       this.isApiHealthy = false;
+      const text = await response.text();
+      if (text == "{\"authentication\":\"basic\"}") this.basicAuth = true;
       throw new Error(
         `Failed to retrieve data from osu! api: ${
           response.status
-        } ${await response.text()}`
+        } ${text}`
       );
     } else {
       this.isApiHealthy = true;
@@ -89,8 +95,8 @@ export class OsuAPI {
         if (beatmap === null) {
           redis.zadd(`beatmap-queue`, "LT", Date.now(), score.beatmap_id);
         }
-
-        return {
+        
+        const finalTransformed = {
           beatmap_id: score.beatmap_id,
           ended_at: new Date(score.ended_at).getTime(),
           id: score.id,
@@ -98,8 +104,13 @@ export class OsuAPI {
           pp: score.pp,
           user: { id: score.user_id, username },
           beatmap: beatmap === null ? null : JSON.parse(beatmap),
+          accuracy: score.accuracy,
           rulesetId: score.ruleset_id,
+          rank: score.rank,
         };
+
+        createNewScore(finalTransformed);
+        return finalTransformed;
       }
     );
 
@@ -154,6 +165,7 @@ export class OsuAPI {
       );
 
       console.log(`Successfully logged into osu! Web API.`);
+      this.basicAuth = false;
       this.isApiHealthy = true;
     } catch (e) {
       console.log(`Failed to retrieve bearer token from osu! api:`, e);

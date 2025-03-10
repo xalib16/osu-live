@@ -1,5 +1,6 @@
 import z from "zod";
-import { WebAPIBeatmap } from "../schema/WebAPIBeatmap.js";
+
+import { WebAPIBeatmap } from "../schema/OsuAPI/WebAPIBeatmap";
 
 export type TransformedAPIData = {
   beatmap_id: number;
@@ -11,5 +12,8 @@ export type TransformedAPIData = {
     username: string | null;
   };
   id: number;
+  accuracy: number;
+  rank: string;
   beatmap: z.infer<typeof WebAPIBeatmap> | null;
+  rulesetId: number;
 };

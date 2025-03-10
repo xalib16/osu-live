@@ -1,21 +1,27 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext",
+    "module": "ESNext",
     "outDir": "dist",
     "strict": true,
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "bundler",
     "types": ["node"],
     "resolveJsonModule": true,
     "noErrorTruncation": true,
+    "noEmit": true,
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
-    "lib": ["ESNext"]
+    "lib": ["ESNext"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@root/*": ["./*"]
+    }
   },
   "tsc-alias": {
     "resolveFullPaths": true
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests", "*.config.ts", "src/types/declarations/**.d.ts"],
 }

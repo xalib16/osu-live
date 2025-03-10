@@ -7,24 +7,35 @@
   },
   "license": "GPL-3.0-only",
   "private": true,
+
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "db:studio": "drizzle-kit studio --config ./drizzle.config.ts",
+    "db:generate": "drizzle-kit generate --config ./drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config ./drizzle.config.ts",
+    "db:up": "drizzle-kit up --config ./drizzle.config.ts",
+    "db:drop": "drizzle-kit drop --config ./drizzle.config.ts"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/express-ws": "^3.0.5",
     "@types/node": "^22.13.4",
+    "@types/pg": "^8.11.11",
     "@types/ws": "^8.5.14",
+    "drizzle-kit": "^0.30.5",
     "tsx": "4.19.3",
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "@libsql/client": "^0.14.0",
     "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.40.0",
     "express": "^4.21.2",
     "express-ws": "^5.0.2",
     "ioredis": "^5.5.0",
+    "pg": "^8.13.3",
     "ws": "^8.18.0",
     "zod": "^3.24.2"
   }

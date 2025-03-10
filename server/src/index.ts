@@ -3,8 +3,8 @@ import express from "express";
 import expressWs from "express-ws";
 import Redis from "ioredis";
 import EventEmitter from "node:events";
-import { OsuAPI } from "./struct/OsuAPI.js";
-import { TransformedAPIData } from "./types/index.js";
+import { OsuAPI } from "./struct/OsuAPI";
+import { TransformedAPIData } from "./types/index";
 
 const redisUrl = process.env.REDIS_URL;
 if (!redisUrl) {
@@ -108,5 +108,5 @@ app.ws("/", async (ws) => {
   });
 });
 
-const port = process.env.PORT || 3727;
-app.listen(port, () => console.log(`Listening on ${port}`));
+const port = process.env.PORT ? parseInt(process.env.PORT) : 3727;
+app.listen(port, '0.0.0.0', () => console.log(`Listening on ${port}`));
