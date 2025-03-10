@@ -8,6 +8,13 @@
       "when": 1741579801473,
       "tag": "0000_colorful_silvermane",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1741636878463,
+      "tag": "0001_overrated_valkyrie",
+      "breakpoints": true
     }
   ]
 }

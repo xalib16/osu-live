@@ -16,7 +16,7 @@ export const beatmapSetTable = sqliteTable("beatmap_set", {
     title: text("title").notNull(),
     status: text("status").notNull(),
     artist: text("artist").notNull(),
-    user_id: integer("user_id").notNull(),
+    user_id: integer("user_id").references(() => userTable.id).notNull(),
     updated_at: integer("updated_at").notNull().default(sql`(unixepoch())`)
 });
 
@@ -54,7 +54,7 @@ export const beatmapSetRelations = relations(beatmapSetTable, ({ one, many }) =>
         fields: [beatmapSetTable.user_id],
         references: [userTable.id]
     }),
-    //beatmaps: many(beatmapTable)
+    beatmaps: many(beatmapTable)
 }));
 
 export const beatmapRelations = relations(beatmapTable, ({ one, many }) => ({
@@ -78,5 +78,5 @@ export const scoreRelations = relations(scoreTable, ({ one }) => ({
 
 export const userRelations = relations(userTable, ({ many }) => ({
     scores: many(scoreTable),
-    //ownedBeatmaps: many(beatmapSetTable)
+    ownedBeatmaps: many(beatmapSetTable)
 }));
