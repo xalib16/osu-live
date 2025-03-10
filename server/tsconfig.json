@@ -23,5 +23,5 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
-  "include": ["src", "tests", "*.config.ts", "src/types/declarations/**.d.ts"],
+  "include": ["src", "tests", "src/types/declarations/**.d.ts"],
 }
