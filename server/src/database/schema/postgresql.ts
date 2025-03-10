@@ -16,7 +16,7 @@ export const beatmapSetTable = pgTable("beatmap_set", {
     title: text("title").notNull(),
     status: text("status").notNull(),
     artist: text("artist").notNull(),
-    user_id: integer("user_id").references(() => userTable.id).notNull(),
+    user_id: integer("user_id").references(() => userTable.id, { "onDelete": "cascade" }).notNull(),
     updated_at: integer("updated_at").notNull().default(sql`extract(epoch from now())`)
 });
 
