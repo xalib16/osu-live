@@ -1,5 +1,5 @@
 {
-  "id": "c96940cd-4dfa-4b90-a83e-2fcdd50b483e",
+  "id": "2443c9e7-83a3-47ed-9af3-3abf9b2c4751",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -47,7 +47,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "beatmap_set_user_id_user_id_fk": {
+          "name": "beatmap_set_user_id_user_id_fk",
+          "tableFrom": "beatmap_set",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -157,10 +171,10 @@
         },
         "mods": {
           "name": "mods",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "default": "'[]'"
+          "default": 0
         },
         "pp": {
           "name": "pp",

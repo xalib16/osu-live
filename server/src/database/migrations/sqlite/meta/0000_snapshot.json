@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "2e1aa12f-53a3-4a68-abf8-e01ba3c82f7b",
+  "id": "d4022c39-3564-4321-9abd-a01589ab75a7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "beatmap_set": {
@@ -52,7 +52,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "beatmap_set_user_id_user_id_fk": {
+          "name": "beatmap_set_user_id_user_id_fk",
+          "tableFrom": "beatmap_set",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
