@@ -25,7 +25,7 @@ Please open an issue for your idea first so we can make sure it's right for osu!
 3. Open `.env.example`
 4. Add your `OSU_CLIENT_ID` and `OSU_CLIENT_SECRET`.
 5. Make sure `REDIS_URL` matches the URL of your Redis instance.
-6. Set `POSTGRES_URL` and `DATABASE_TYPE` if you are using an [external or self hosted database](https://github.com/xalib16/osu-live/blob/add-scores-history/server/SETUP_DATABASE.md).
+6. Set `POSTGRES_URL` and `DATABASE_TYPE` if you are using an [external or self-h<osted database](https://github.com/xalib16/osu-live/blob/add-scores-history/server/SETUP_DATABASE.md).
 7. Rename `.env.example` to `.env`
 8. `pnpm dev`. Happy hacking!
 
