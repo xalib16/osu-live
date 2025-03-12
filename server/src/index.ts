@@ -5,12 +5,15 @@ import Redis from "ioredis";
 import EventEmitter from "node:events";
 import { OsuAPI } from "./struct/OsuAPI";
 import { TransformedAPIData } from "./types/index";
+import { DatabaseAPI } from "./struct/DatabaseAPI";
+import { databaseQueue } from "./struct/helpers/JobQueueHelper";
 
 const redisUrl = process.env.REDIS_URL;
 if (!redisUrl) {
   throw new Error("REDIS_URL is unset!");
 }
 
+const db = new DatabaseAPI();
 const osu = new OsuAPI();
 export const redis = new Redis(redisUrl);
 
@@ -55,6 +58,11 @@ setInterval(async () => {
     for (const user of users) {
       console.log(`Found user ${user.username} for ID ${user.id}`);
       redis.set(`user:${user.id}`, user.username);
+      databaseQueue.addJob(() => {
+        return db.updateUser(user.id, {
+          username: user.username
+        });
+      });
     }
   } catch (e) {
     console.error(`Failed to retrieve users:`, e);
@@ -79,6 +87,7 @@ setInterval(async () => {
         `Found map ${beatmap.beatmapset.artist} - ${beatmap.beatmapset.title} [${beatmap.version}] for ID ${beatmap.id}`
       );
       redis.set(`beatmap:${beatmap.id}`, JSON.stringify(beatmap));
+      redis.zadd(`user-queue`, "LT", Date.now(), beatmap.beatmapset.user_id);
     }
   } catch (e) {
     console.error(`Failed to retrieve beatmaps:`, e);

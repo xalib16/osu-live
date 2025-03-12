@@ -79,7 +79,7 @@ export async function createNewScore(data: TransformedAPIData) {
             rank: data.rank,
             user_id: data.user.id,
             beatmap_id: data.beatmap_id,
-            ended_at: data.ended_at
+            ended_at: data.ended_at/1000
         });
     });
 };

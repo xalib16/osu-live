@@ -30,7 +30,7 @@ export class OsuAPI {
         this.basicAuth
     ) {
       await this.login();
-    }
+    };
 
     const response = await fetch(url, {
       ...options,
@@ -49,7 +49,7 @@ export class OsuAPI {
     } else {
       this.isApiHealthy = true;
       return await response.json();
-    }
+    };
   }
 
   private makeParams(data: (string | number)[], key: string) {
@@ -62,7 +62,7 @@ export class OsuAPI {
     const params = new URLSearchParams();
     if (this.scoreCursor !== undefined) {
       params.set("cursor[id]", this.scoreCursor.toString());
-    }
+    };
 
     let url = `${this.apiBaseUrl}/scores?${params}`;
 
@@ -81,20 +81,13 @@ export class OsuAPI {
       beatmaps = await redis.mget(
         parsedBody.scores.map((score) => `beatmap:${score.beatmap_id}`)
       );
-    }
+    };
 
     const transformed: TransformedAPIData[] = parsedBody.scores.map(
       (score, index) => {
         const username = usernames[index];
         const beatmap = beatmaps[index];
-
-        if (username === null) {
-          redis.zadd(`user-queue`, "LT", Date.now(), score.user_id);
-        }
-
-        if (beatmap === null) {
-          redis.zadd(`beatmap-queue`, "LT", Date.now(), score.beatmap_id);
-        }
+        const beatmapParsed = beatmap ? JSON.parse(beatmap) : null;
         
         const finalTransformed = {
           beatmap_id: score.beatmap_id,
@@ -103,13 +96,22 @@ export class OsuAPI {
           mods: score.mods,
           pp: score.pp,
           user: { id: score.user_id, username },
-          beatmap: beatmap === null ? null : JSON.parse(beatmap),
+          beatmap: beatmapParsed,
           accuracy: score.accuracy,
           rulesetId: score.ruleset_id,
           rank: score.rank,
         };
 
         createNewScore(finalTransformed);
+
+        if (username === null) {
+          redis.zadd(`user-queue`, "LT", Date.now(), score.user_id);
+        };
+
+        if (beatmap === null) {
+          redis.zadd(`beatmap-queue`, "LT", Date.now(), score.beatmap_id);
+        };
+
         return finalTransformed;
       }
     );
@@ -141,7 +143,7 @@ export class OsuAPI {
   public async login() {
     if (!this.client_id || !this.client_secret) {
       throw new Error(`CLIENT_ID and CLIENT_SECRET are unset!`);
-    }
+    };
 
     const response = await fetch(this.oauthUrl, {
       method: "POST",

@@ -2,7 +2,7 @@ export class JobQueue {
     private queue: (() => Promise<any>)[] = [];
     private isProcessing: boolean = false;
 
-    public addJob(operation: () => Promise<any>): Promise<any> {
+    public addJob(operation: () => Promise<any>, isPriority?: boolean): Promise<any> {
         let resolveJob: (value: any) => void;
         let rejectJob: (reason?: any) => void;
 
@@ -20,7 +20,7 @@ export class JobQueue {
             }
         };
 
-        this.queue.push(wrappedOperation);
+        this.queue[!isPriority ? "push" : "unshift"](wrappedOperation);
         console.log(`Added job to queue. Queue length: ${this.queue.length}`);
         if (!this.isProcessing) {
             this.processQueue();
