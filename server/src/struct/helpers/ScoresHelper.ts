@@ -15,7 +15,7 @@ export async function createNewScore(data: TransformedAPIData) {
                 id: data.user.id,
                 username: data.user.username || ("OSULIVE_UNKNOWN_USER_ID:" + data.user.id)
             });
-        } else if (data.user.username != user.username) {
+        } else if (data.user.username && data.user.username != user.username) {
             await transactionContext.updateUser(data.user.id, {
                 username: data.user.username || ("OSULIVE_UNKNOWN_USER_ID:" + data.user.id)
             });
